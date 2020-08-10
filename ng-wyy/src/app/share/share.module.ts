@@ -5,16 +5,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { NgZorroAntdModule } from 'ng-zorro-antd'
+import { NzInputModule } from 'ng-zorro-antd/input';
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    NgZorroAntdModule,
+    NzInputModule
   ],
   exports:[ //需要导出，别的地方才可以使用
-    FormsModule
+    FormsModule,
+    NgZorroAntdModule,
+    NzInputModule
   ]
 })
 export class ShareModule { }

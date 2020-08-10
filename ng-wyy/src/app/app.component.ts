@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ng-wyy';
+
+  number:any[] = [
+    1,3,4
+  ]
 }

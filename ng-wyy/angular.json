@@ -55,8 +55,7 @@
               }
             ],
             "styles": [
-              "src/assets/styles/index.less",
-              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
+              "src/assets/styles/index.less"
             ],
             "scripts": []
           },

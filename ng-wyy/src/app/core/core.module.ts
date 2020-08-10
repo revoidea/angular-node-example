@@ -2,10 +2,9 @@
  * 管理（其他)的组件，模块
  * 包括一次性引入的模块，
  */
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, SkipSelf, Optional } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from '../app-routing.module';
-import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServicesModule } from '../services/services.module'
@@ -25,7 +24,6 @@ registerLocaleData(zh); //配置语言
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    CommonModule,
     ServicesModule,
     PagesModule,
     ShareModule,

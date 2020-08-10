@@ -13,5 +13,9 @@
     {
       "path": "./tsconfig.spec.json"
     }
-]
+  ],
+  "compilerOptions": {
+    "target": "es6",
+    "experimentalDecorators": true,
+  }
 }
