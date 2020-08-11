@@ -8,8 +8,9 @@ import { AppRoutingModule } from '../app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServicesModule } from '../services/services.module'
-import { PagesModule } from '../pages/pages.module'
 import { ShareModule } from '../share/share.module'
+import { PagesModule } from '../pages/pages.module'
+
 import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 

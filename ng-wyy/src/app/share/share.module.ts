@@ -17,6 +17,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     NzInputModule
   ],
   exports:[ //需要导出，别的地方才可以使用
+    CommonModule,
     FormsModule,
     NgZorroAntdModule,
     NzInputModule
