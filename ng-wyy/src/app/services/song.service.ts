@@ -40,20 +40,28 @@ export class SongService {
     .pipe(map((res: { data:SongUrl[] }) => res.data))
   }
 
-  getSongList(songs:Song | Song[]): Observable<Song[]>{
-    //因为songs可能是单个也可是多个，所以统一为数组
-    const songArr = Array.isArray(songs) ? songs.slice() : [songs];
-    //拼接ids字符串 , ','连接
-    const ids = songArr.map(item =>item.id).join(',');
+  // getSongList(songs:Song | Song[]): Observable<Song[]>{
+  //   //因为songs可能是单个也可是多个，所以统一为数组
+  //   const songArr = Array.isArray(songs) ? songs.slice() : [songs];
+  //   //拼接ids字符串 , ','连接
+  //   const ids = songArr.map(item =>item.id).join(',');
 
-    //使用create创建一个数据流
-    return Observable.create(observer => {
-      //调用获取歌曲路径接口，并处理数据，对数据进行拼接
-      this.getSongUrl(ids).subscribe(urls => {
-          this.generateSongList(songArr,urls)
-      })
-    })
+  //   //使用create创建一个数据流
+  //   return Observable.create(observer => {
+  //     //调用获取歌曲路径接口，并处理数据，对数据进行拼接
+  //     this.getSongUrl(ids).subscribe(urls => {
+  //         this.generateSongList(songArr,urls)
+  //     })
+  //   })
    
+  // }
+
+
+  //简化版
+  getSongList(songs:Song | Song[]): Observable<Song[]> {
+    const songArr = Array.isArray(songs) ? songs.slice() : [songs];
+    const ids = songArr.map(item => item.id).join(',');
+    return this.getSongUrl(ids).pipe(map(urls => this.generateSongList(songArr,urls)));
   }
 
 
