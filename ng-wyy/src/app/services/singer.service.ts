@@ -1,3 +1,5 @@
+/**歌手的服务 */
+
 import { Injectable, Inject } from '@angular/core';
 import { ServicesModule,API_CONFIG } from './services.module'
 import { Observable } from 'rxjs';
@@ -33,7 +35,7 @@ export class SingerService {
 
   ) { }
 
-  //获取轮播图
+  //获取歌手列表
   getEnterSinger(args:SingerParams = defaultParams):Observable<Singer[]> {
     //传参方式(angular模块自带)
     //queryString.stringify(args)----报错

@@ -5,6 +5,7 @@ import { NzCarouselComponent } from 'ng-zorro-antd';
 // import { SingerService } from 'src/app/services/singer.service'
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/internal/operators';
+import { SheetService } from 'src/app/services/sheet.service'
  
 
 
@@ -29,7 +30,8 @@ export class HomeComponent implements OnInit {
     // private homeService:HomeService,
     // private singerService:SingerService,
     //注入Route这个类
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    private sheetService:SheetService
   ) { 
     
     //是一个Observable对象
@@ -46,7 +48,6 @@ export class HomeComponent implements OnInit {
     //  this.getPersonalizedSheet()
     //  this.getEnterSinger()
   }
-
 
   //在本组件里面调用的，声明private
 
@@ -88,5 +89,13 @@ export class HomeComponent implements OnInit {
 
   onChangeSlide(type:string){//type:'pre' | 'next' 
     this.nzCarousel[type]();
+  }
+
+  //播放事件
+  onPlaySheet(id:number){
+    console.log('id',id)
+    this.sheetService.playSheet(id).subscribe(res => {
+      console.log("res",res)
+    })
   }
 }

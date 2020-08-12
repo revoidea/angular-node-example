@@ -1,3 +1,5 @@
+/**首页的服务 */
+
 import { Injectable, Inject } from '@angular/core';
 import { ServicesModule,API_CONFIG } from './services.module'
 import { Observable } from 'rxjs';
