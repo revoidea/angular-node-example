@@ -11,7 +11,6 @@ import { WyUiModule } from './wy-ui/wy-ui.module';
 
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
     FormsModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ElementRef, ViewChild, Input, Inject, ChangeDetectorRef, OnDestroy, forwardRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ElementRef, ViewChild, Input, Inject, ChangeDetectorRef, OnDestroy, forwardRef, Output, EventEmitter } from '@angular/core';
 import { fromEvent, merge, Observable, Subscription } from 'rxjs';
 import { tap, pluck, map, distinctUntilChanged, takeUntil, filter } from 'rxjs/internal/operators';
 import { SliderEventObserverConfig, SliderValue } from './wy-slider-types';
@@ -29,6 +29,8 @@ export class WySliderComponent implements OnInit,OnDestroy,ControlValueAccessor 
   @Input() wyMin = 0;
   @Input() wyMax = 100;
   @Input() bufferOffset:SliderValue = 0; 
+
+  @Output() wyOnAfterChange = new EventEmitter<SliderValue>();
 
   private sliderDom:HTMLDivElement;
   //获取元素
@@ -174,6 +176,7 @@ export class WySliderComponent implements OnInit,OnDestroy,ControlValueAccessor 
   }
   //结束
   private onDragEnd(value:number){
+    this.wyOnAfterChange.emit(this.value);
     this.toggleDragMoving(false);
     this.cdr.markForCheck();//可以实现手动触发变更检测
 

@@ -6,6 +6,10 @@ import { NzCarouselComponent } from 'ng-zorro-antd';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/internal/operators';
 import { SheetService } from 'src/app/services/sheet.service'
+import { Store } from '@ngrx/store'
+import { AppStoreModule } from 'src/app/store';
+import { SetSongList, SetPlayList, SetCurrentIndex } from 'src/app/store/actions/player.actions';
+
  
 
 
@@ -31,7 +35,8 @@ export class HomeComponent implements OnInit {
     // private singerService:SingerService,
     //注入Route这个类
     private route:ActivatedRoute,
-    private sheetService:SheetService
+    private sheetService:SheetService,
+    private store$:Store<AppStoreModule>
   ) { 
     
     //是一个Observable对象
@@ -94,8 +99,13 @@ export class HomeComponent implements OnInit {
   //播放事件
   onPlaySheet(id:number){
     console.log('id',id)
-    this.sheetService.playSheet(id).subscribe(res => {
-      console.log("res",res)
-    })
+    this.sheetService.playSheet(id).subscribe(list => {
+      // console.log("res",list)
+      //执行动作
+      this.store$.dispatch(SetSongList({ songList: list }));
+      this.store$.dispatch(SetPlayList({ playList:list }));
+      this.store$.dispatch(SetCurrentIndex({ currentIndex:0 }));
+
+    }) 
   }
 }

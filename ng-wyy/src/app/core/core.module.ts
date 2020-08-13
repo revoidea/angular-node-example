@@ -10,14 +10,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServicesModule } from '../services/services.module'
 import { ShareModule } from '../share/share.module'
 import { PagesModule } from '../pages/pages.module'
-import { AppStoreModule } from '../store'
+import { AppStoreModule } from '../store/index'
 
 import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { zh_CN } from 'ng-zorro-antd/i18n';
-import { from } from 'rxjs';
+
 
 registerLocaleData(zh); //配置语言
 
