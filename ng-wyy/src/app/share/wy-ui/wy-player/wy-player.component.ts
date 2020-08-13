@@ -51,6 +51,8 @@ export class WyPlayerComponent implements OnInit {
 
   //是否显示音量面板
   showVolumePanel = false;
+  //是否显示歌曲列表面板
+  showPanel = false;
 
   //是否点击的是音量面板本身
   selfClick = false;
@@ -201,16 +203,25 @@ export class WyPlayerComponent implements OnInit {
   }
 
   //控制音量面板
-  togglerVolPanel(evt:MouseEvent){
+  togglerVolPanel(){
     //阻止冒泡
     //evt.stopPropagation();   
-    this.togglerPanel();
+    this.togglerPanel('showVolumePanel');
   }
 
+  //控制歌曲列表面板
+  togglerListPanel(){
+    //有歌曲才显示
+    if(this.songList.length){
+      this.togglerPanel('showPanel');
+    }
+  }
+  
+
   //音量面板显示或隐藏
-  togglerPanel(){
-    this.showVolumePanel = !this.showVolumePanel;
-    if(this.showVolumePanel){
+  togglerPanel(type:string){
+    this[type] = !this[type];
+    if(this.showVolumePanel || this.showPanel){
       //定义一个全局绑定事件
       this.bindDocumentClickListener();
     }else{
@@ -224,6 +235,7 @@ export class WyPlayerComponent implements OnInit {
        this.winClick = fromEvent(this.doc,'click').subscribe(() => {
          if(!this.selfClick){ //说明点击了播放器以外的部分
             this.showVolumePanel = false;
+            this.showPanel = false;
             this.unbindDocumentClickListener();
          }
          this.selfClick = false;
@@ -344,6 +356,11 @@ export class WyPlayerComponent implements OnInit {
   private play(){
     this.playing = true;
     this.audioEl.play();
+  }
+
+  //改变歌曲
+  onChangeSong(song:Song){
+    this.updateCurrentIndex(this.playList,song);
   }
   
   //获取当前播放歌曲的封面图

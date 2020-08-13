@@ -40,17 +40,29 @@
                 <i class="share" title="分享"></i>
             </div>
             <div class="ctrl">
-                <i class="volume" title="音量"  (click)="togglerVolPanel($event)"></i>
+                <i class="volume" title="音量"  (click)="togglerVolPanel()"></i>
                 <i  [ngClass]="currentMode.type"  [title]="currentMode.label" (click)="changeMode()"></i>
-                <p class="open">
+                <p class="open" (click)="togglerListPanel()">
                     <span></span>
                 </p>
                 <div class="control-vol" [hidden]="!showVolumePanel">
                     <app-wy-slider [wyVertical]="true" [(ngModel)]="volume" (ngModelChange)="onVolumeChange($event)"></app-wy-slider>
                 </div>
             </div>
+            <!--歌曲列表面板 start-->
+            <app-wy-player-panel
+               [songList]="songList"
+               [currentSong]="currentSong"
+               [currentIndex]="currentIndex"
+               [show]="showPanel"
+               (onClose)="showPanel = false"
+               (onChangeSong)="onChangeSong($event)"
+            >
+            </app-wy-player-panel>
+            <!--歌曲列表面板 end-->
         </div>
     </div>
+    <!--歌曲播放 start-->
     <audio 
         #audio
         [src]="currentSong?.url"
@@ -58,8 +70,8 @@
         (timeupdate)="onTimeUpdate($event)"
         (ended)="onEnded()"
     >
-
     </audio>
+    <!--歌曲播放 end-->
 </div>
 
 

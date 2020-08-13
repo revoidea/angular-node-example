@@ -1,0 +1,51 @@
+<div class="play-panel" [class.show]="show">
+    <!--面板头部 start-->
+    <div class="hd">
+        <div class="hdc">
+            <h4>播放列表（ <span>{{songList.length}}</span> ）</h4>
+            <div class="add-all">
+                <i class="icon" title="收藏全部"></i>收藏全部
+            </div>
+            <span class="line"></span>
+            <div class="clear-all">
+                <i class="icon trush" title="清除"></i>清除
+            </div>
+            <p class="playing-name">{{currentSong?.name}}</p>
+            <i class="icon close" (click)="onClose.emit()"></i>
+        </div>
+    </div>
+     <!--面板头部 end-->
+     <!--面板内容 start-->
+    <div class="bd">
+        <img src="//music.163.com/api/img/blur/109951163826278397"  class="imgbg">
+        <div class="msk">
+            <!--歌曲列表 start-->
+            <div class="list-wrap">
+                <ul>
+                    <li *ngFor="let item of songList;index as i" [class.current]="currentIndex === i" (click)="onChangeSong.emit(item)">
+                        <i class="col arrow"></i>
+                        <div class="col name ellipsis">{{item.name}}</div>
+                        <div class="col icons">
+                            <i class="ico like" title="收藏"></i>
+                            <i class="ico share" title="分享"></i>
+                            <i class="ico trush" title="删除"></i>
+                        </div>
+                        <div class="singers clearfix ellipsis">
+                            <div class="singer-item" *ngFor="let singer of item.ar;last as isLast">
+                                <a  class="col ellipsis">{{singer.name}}</a>
+                                <span [hidden]="isLast">/</span>
+                            </div>
+                        </div>
+                        <div class="col duration">{{(item.dt / 1000) | formatTime}}</div>
+                        <div class="col link"></div>
+                    </li>
+                </ul>
+            </div>
+            <!--歌曲列表 end-->
+            <ul>
+                歌词
+            </ul>
+        </div>
+    </div>
+    <!--面板内容 end-->
+</div>
