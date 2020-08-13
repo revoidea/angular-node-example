@@ -41,7 +41,7 @@
             </div>
             <div class="ctrl">
                 <i class="volume" title="音量"  (click)="togglerVolPanel($event)"></i>
-                <i class="loop" title="循环"></i>
+                <i  [ngClass]="currentMode.type"  [title]="currentMode.label" (click)="changeMode()"></i>
                 <p class="open">
                     <span></span>
                 </p>
@@ -56,6 +56,7 @@
         [src]="currentSong?.url"
         (canplay)= "onCanplay()"
         (timeupdate)="onTimeUpdate($event)"
+        (ended)="onEnded()"
     >
 
     </audio>

@@ -4,10 +4,22 @@ import { AppStoreModule } from 'src/app/store/index';
 import { getSongList, getPlayList, getCurrentIndex,getPlayer, getCurrentSong, getPlayMode } from '../../../store/selectors/player.selector'
 import { Song } from 'src/app/services/data-types/common.types';
 import { PlayMode } from './player.type';
-import { SetCurrentIndex } from 'src/app/store/actions/player.actions';
+import { SetCurrentIndex, SetPlayMode, SetPlayList } from 'src/app/store/actions/player.actions';
 import { Subscription, fromEvent } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
+import { shuffle } from 'src/app/utils/array';
 
+//模式类型
+const modeTypes:PlayMode[] =[{
+    type:'loop',
+    label:'循环'
+},{
+    type:'singleLoop',
+    label:'单曲循环'
+},{
+    type:'random',
+    label:'随机'
+}];
 
 @Component({
   selector: 'app-wy-player',
@@ -46,6 +58,11 @@ export class WyPlayerComponent implements OnInit {
   //用于window绑定事件
   private winClick:Subscription;
 
+  //当前模式
+  currentMode:PlayMode;
+  //模式点击次数
+  modeCount = 0;
+
   @ViewChild('audio',{ static:true }) private audio:ElementRef;
   private audioEl :HTMLAudioElement;
 
@@ -70,6 +87,20 @@ export class WyPlayerComponent implements OnInit {
     });
     appStore$.pipe(select(getPlayMode)).subscribe(mode => {
       console.log("getPlayMode:",mode)
+      this.currentMode = mode;
+      if(this.songList){
+         let list = this.songList.slice();
+         //随机模式更改playList
+         if(mode.type === 'random'){
+            list = shuffle(this.songList);
+            //改变歌曲播放列表，但不能影响正在播放的歌曲
+            this.updateCurrentIndex(list,this.currentSong);
+            //改变歌曲播放列表
+            this.store$.dispatch(SetPlayList({ playList:list}));
+         }
+         console.log("list",list)
+      }
+    
     });
     appStore$.pipe(select(getCurrentSong)).subscribe(song => {
       console.log("getCurrentSong:",song)
@@ -106,6 +137,8 @@ export class WyPlayerComponent implements OnInit {
       this.audioEl = this.audio.nativeElement;
   }
 
+ 
+
   private watchList(list:Song[],type:string){
      console.log('list',list);
      this[type] = list;
@@ -128,6 +161,22 @@ export class WyPlayerComponent implements OnInit {
       this.duration = song.dt / 1000;
     }
     console.log('song',song)
+  }
+
+
+  //更新当前索引
+  private updateCurrentIndex(list:Song[],song:Song){
+      const newIndex = list.findIndex(item => item.id === song.id);
+      this.store$.dispatch(SetCurrentIndex({ currentIndex:newIndex }));
+  }
+
+
+  //模式切换
+  changeMode(){
+    //模式点击次数
+    //modeTypes[++this.modeCount % 3];
+
+     this.store$.dispatch(SetPlayMode({ playMode :modeTypes[++this.modeCount % 3]}));
   }
 
   //播放进度
@@ -240,6 +289,18 @@ export class WyPlayerComponent implements OnInit {
       this.updateIndex(newIndex);
     }
    
+  }
+
+  //歌曲播放结束时
+  onEnded(){
+    //停止播放
+    this.playing = false;
+    //单曲循环
+    if(this.currentMode.type === 'singleLoop'){
+      this.loop();
+    }else{
+      this.onNext(this.currentIndex + 1);
+    } 
   }
 
   //单曲循环

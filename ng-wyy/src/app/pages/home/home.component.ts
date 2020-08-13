@@ -102,8 +102,8 @@ export class HomeComponent implements OnInit {
     this.sheetService.playSheet(id).subscribe(list => {
       // console.log("res",list)
       //执行动作
-      this.store$.dispatch(SetSongList({ songList: list }));
-      this.store$.dispatch(SetPlayList({ playList:list }));
+      this.store$.dispatch(SetSongList({ songList: list.slice(3) }));
+      this.store$.dispatch(SetPlayList({ playList:list.slice(3) }));
       this.store$.dispatch(SetCurrentIndex({ currentIndex:0 }));
 
     }) 
