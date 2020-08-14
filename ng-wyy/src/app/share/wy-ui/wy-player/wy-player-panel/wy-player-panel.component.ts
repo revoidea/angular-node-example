@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
 import { Song } from 'src/app/services/data-types/common.types';
+import { WyScrollComponent } from '../wy-scroll/wy-scroll.component';
 
 @Component({
   selector: 'app-wy-player-panel',
@@ -16,6 +17,10 @@ export class WyPlayerPanelComponent implements OnInit,OnChanges {
 
   @Output() onClose = new EventEmitter<void>(); //面板关闭按钮事件
   @Output() onChangeSong = new EventEmitter<Song>();//歌曲列表中切换歌曲事件
+
+  @ViewChildren(WyScrollComponent) private myScroll:QueryList<WyScrollComponent> ;
+
+   
   constructor() { }
 
   ngOnInit(): void {
@@ -30,5 +35,13 @@ export class WyPlayerPanelComponent implements OnInit,OnChanges {
     if(changes["currentSong"]){
       console.log("currentSong:",this.currentSong);
     }
+    if(changes["show"]){
+      //组件不是第一次加载，并且show = true时，去使ts重新刷新
+      if(!changes["show"].firstChange && this.show){
+        this.myScroll.first.refreshScroll();
+      }
+    
+    }
+
   }
 }
