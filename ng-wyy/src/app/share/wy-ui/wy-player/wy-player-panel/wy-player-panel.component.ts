@@ -16,11 +16,12 @@ export class WyPlayerPanelComponent implements OnInit,OnChanges {
   @Input() show:boolean;//播放歌曲面板是否显示
 
   @Output() onClose = new EventEmitter<void>(); //面板关闭按钮事件
-  @Output() onChangeSong = new EventEmitter<Song>();//歌曲列表中切换歌曲事件
+  @Output() onChangeSong = new EventEmitter<Song>();//歌曲列表中切换歌曲事件 
+
+  scrollY = 0;
 
   @ViewChildren(WyScrollComponent) private myScroll:QueryList<WyScrollComponent> ;
 
-   
   constructor() { }
 
   ngOnInit(): void {
@@ -34,13 +35,46 @@ export class WyPlayerPanelComponent implements OnInit,OnChanges {
     }
     if(changes["currentSong"]){
       console.log("currentSong:",this.currentSong);
+      if(this.currentSong){
+        if(this.show){
+           //歌曲滚动到当前的位置
+           this.scrollToCurrent();
+        }
+      }else{
+
+      }
     }
     if(changes["show"]){
       //组件不是第一次加载，并且show = true时，去使ts重新刷新
       if(!changes["show"].firstChange && this.show){
         this.myScroll.first.refreshScroll();
+        setTimeout(() =>{
+          if(this.currentSong){
+            this.scrollToCurrent();
+          }
+        },80)
       }
-    
+    }
+
+  }
+
+  //歌曲滚动到当前的位置
+  private scrollToCurrent(){
+    //获取列表的所有li元素
+    const songListRefs = this.myScroll.first.el.nativeElement.querySelectorAll('ul li');
+    console.log('songListRefs',songListRefs);
+    if(songListRefs.length){
+      //获取当前播放li标签
+       const currentLi = <HTMLElement>songListRefs[this.currentIndex || 0];
+       const offsetTop = currentLi.offsetTop;
+       const offsetHeight = currentLi.offsetHeight;//li 元素的高度
+       //获取列表滚动到的位置
+      console.log("scrollY",scrollY);
+      console.log("offsetTop",offsetTop);
+      if((offsetTop - Math.abs(this.scrollY)) > offsetHeight * 5 || (offsetTop < Math.abs(this.scrollY))){
+        this.myScroll.first.scrollToElement(currentLi,300,false,false);
+
+      }
     }
 
   }

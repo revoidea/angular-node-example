@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 
 import BScroll from '@better-scroll/core';
 import ScrollBar from '@better-scroll/scroll-bar';
@@ -27,9 +27,12 @@ export class WyScrollComponent implements OnInit,AfterViewInit,OnChanges {
   //声明BScroll实例
   private bs:BScroll;
 
+  //自定义一个事件
+  @Output() private onScrollEnd = new EventEmitter<number>();
+
   @ViewChild('wrap',{ static:true })  private wrapRef:ElementRef;
 
-  constructor() { }
+  constructor(readonly el:ElementRef) { }
 
   ngOnInit(): void {
   }
@@ -42,12 +45,22 @@ export class WyScrollComponent implements OnInit,AfterViewInit,OnChanges {
         },
         mouseWheel: {} //滚轮
      });
+
+     this.bs.on('scrollEnd',({ y }) => this.onScrollEnd.emit(y));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes["data"]){
       this.refreshScroll();
     }
+  }
+
+
+  scrollToElement(...args){
+    console.log("bs",this.bs)
+    this.bs.scrollToElement.appy(this.bs,args);  //没法调用这个方法
+    //this.bs.scroller.scrollToElement.apply(this.bs,args);  //报错，Cannot read property 'left' of undefined
+    //this.bs.
   }
 
   //bs 刷新
